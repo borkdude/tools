@@ -17,3 +17,11 @@ List files in jar files.
 Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/ls_jar.clj`
 
 For usage, run `ls_jar --help`.
+
+## nrepl_proxy
+
+Proxy for debugging nREPL interactions.
+
+Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/nrepl_proxy.clj`
+
+For usage, run `nrepl_proxy --help`.
