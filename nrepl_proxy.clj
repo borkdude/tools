@@ -8,9 +8,9 @@
 
 (def deps {:deps {'com.lambdaisland/nrepl-proxy {:mvn/version version}}})
 
-(def spec [[:port {:desc "Your editor connects to this port"}]
+(def spec [[:port {:desc "Your nREPL client connects to this port"}]
            [:attach {:desc "The port of the nREPL server to attach to"}]
-           [:help {:desc "Print this help."}]])
+           [:help {:desc "Print this help"}]])
 
 (defn print-help []
   (println "Proxy server for debugging nREPL.
