@@ -16,6 +16,8 @@ Convert `project.clj` to `deps.edn`.
 
 Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/lein2deps.clj`
 
+See [tweet](https://twitter.com/borkdude/status/1578050265567076353) for demo.
+
 For usage, run: `lein2deps --help`.
 
 ## ls_jar
