@@ -10,6 +10,14 @@ Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/ant
 
 For usage, run `antq --help`.
 
+## lein2deps
+
+Convert `project.clj` to `deps.edn`.
+
+Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/lein2deps.clj`
+
+For usage, run: `lein2deps --help`.
+
 ## ls_jar
 
 List files in jar files.

@@ -1,3 +1,5 @@
+#!/usr/bin/env bb
+
 (require '[babashka.cli :as cli]
          '[clojure.pprint :as pprint]
          '[edamame.core :as e])
