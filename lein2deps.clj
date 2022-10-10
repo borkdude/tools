@@ -39,4 +39,7 @@ Options:
           {:keys [dependencies source-paths resource-paths]} parsed]
       (pprint/pprint
        {:paths (into (vec source-paths) resource-paths)
-        :deps (into {} (for [[d v] dependencies] [d {:mvn/version v}]))}))))
+        :deps (into {} (for [[d v] dependencies]
+                         [(if (simple-symbol? d)
+                            (symbol (str d) (str d))
+                            d) {:mvn/version v}]))}))))
