@@ -13,8 +13,14 @@ Options:
   --project-clj <file>: defaults to \"project.clj\"")
     (let [project-clj (or (:project-clj opts)
                           "project.clj")
-          project-clj-edn (e/parse-string (slurp project-clj) {:read-eval identity})
+          parser (e/reader (slurp project-clj))
+          cfg {:read-eval identity}
+          form (first (take-while #(or
+                                   (and (seq? %)
+                                        (= 'defproject (first %)))
+                                   (= ::e/eof %)) (repeatedly #(e/parse-next parser cfg))))
+          project-clj-edn form
           {:keys [dependencies source-paths resource-paths]} (apply hash-map (drop 3 project-clj-edn))]
       (pprint/pprint
-       {:paths (into source-paths resource-paths)
+       {:paths (into (vec source-paths) resource-paths)
         :deps (into {} (for [[d v] dependencies] [d {:mvn/version v}]))}))))
