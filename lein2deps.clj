@@ -51,7 +51,9 @@ Options:
           parsed (if (:eval opts)
                    (load-file project-clj)
                    (safe-parse project-clj))
-          {:keys [dependencies source-paths resource-paths]} parsed]
+          {:keys [dependencies source-paths resource-paths compile-path]} parsed]
       (pprint/pprint
-       {:paths (into (vec source-paths) resource-paths)
+       {:paths (cond-> (into (vec source-paths) resource-paths)
+                 compile-path
+                 (conj compile-path))
         :deps (into {} (map convert-dep) dependencies)}))))
