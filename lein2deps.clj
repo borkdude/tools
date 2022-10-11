@@ -38,6 +38,24 @@
                  (assoc :exclusions (mapv qualify-dep-name exclusions)))]
     [name params]))
 
+(defn add-prep-lib [deps-edn project-edn]
+  (let [{:keys [java-source-paths compile-path javac-options]} project-edn]
+    (assoc deps-edn
+           :aliases
+           {:build
+            {:deps
+             {'io.github.borkdude/tools {:git/sha "a9a4b27c52542390ab4336fe275d1cb59f1f363c"
+                                         :deps/root "lein2deps"}}
+             :ns-default 'lein2deps.build
+             :lein2deps/compile-java (cond-> {:src-dirs java-source-paths
+                                              :class-dir compile-path}
+                                       javac-options
+                                       (assoc :javac-opts javac-options))}}
+           :deps/prep-lib
+           {:ensure compile-path
+            :alias :build
+            :fn 'compile-java})))
+
 (let [opts (cli/parse-opts *command-line-args*)]
   (if (:help opts)
     (println "Usage: lein2deps <opts>
@@ -51,9 +69,12 @@ Options:
           parsed (if (:eval opts)
                    (load-file project-clj)
                    (safe-parse project-clj))
-          {:keys [dependencies source-paths resource-paths compile-path]} parsed]
+          {:keys [dependencies source-paths resource-paths compile-path java-source-paths]} parsed
+          deps-edn {:paths (cond-> (into (vec source-paths) resource-paths)
+                             compile-path
+                             (conj compile-path))
+                    :deps (into {} (map convert-dep) dependencies)}]
       (pprint/pprint
-       {:paths (cond-> (into (vec source-paths) resource-paths)
-                 compile-path
-                 (conj compile-path))
-        :deps (into {} (map convert-dep) dependencies)}))))
+       (cond-> deps-edn
+         (and java-source-paths compile-path)
+         (add-prep-lib parsed))))))
