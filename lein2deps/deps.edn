@@ -1,0 +1,3 @@
+{:deps
+ {io.github.clojure/tools.build
+  {:git/sha "984a24c0ef0a6af3f304b567adb45af40baefd08"}}}
