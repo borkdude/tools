@@ -23,6 +23,21 @@
         project-clj-edn form]
     (apply hash-map (drop 3 project-clj-edn))))
 
+(defn qualify-dep-name [d]
+  (if (simple-symbol? d)
+    (symbol (str d) (str d))
+    d))
+
+(defn convert-dep [[name version & {:keys [classifier exclusions]}]]
+  (let [name (qualify-dep-name name)
+        name (if classifier
+               (symbol (str name "$" classifier))
+               name)
+        params (cond-> {:mvn/version version}
+                 (seq exclusions)
+                 (assoc :exclusions (mapv qualify-dep-name exclusions)))]
+    [name params]))
+
 (let [opts (cli/parse-opts *command-line-args*)]
   (if (:help opts)
     (println "Usage: lein2deps <opts>
@@ -39,7 +54,4 @@ Options:
           {:keys [dependencies source-paths resource-paths]} parsed]
       (pprint/pprint
        {:paths (into (vec source-paths) resource-paths)
-        :deps (into {} (for [[d v] dependencies]
-                         [(if (simple-symbol? d)
-                            (symbol (str d) (str d))
-                            d) {:mvn/version v}]))}))))
+        :deps (into {} (map convert-dep) dependencies)}))))
