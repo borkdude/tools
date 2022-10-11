@@ -6,12 +6,13 @@
          '[edamame.core :as e])
 
 (defmacro defproject [& [_name _version & body]]
-  (list 'quote
-        (walk/prewalk (fn [form]
-                        (if (and (seq? form)
-                                 (= 'clojure.core/unquote (first form)))
-                          (eval (second form))
-                          form)) body)))
+  `(apply hash-map
+          '~(walk/prewalk (fn [form]
+                            (if (and (seq? form)
+                                     (= 'clojure.core/unquote (first form)))
+                              (eval (second form))
+                              form))
+                          body)))
 
 (defn safe-parse [file]
   (let [parser (e/reader (slurp file))
@@ -66,15 +67,18 @@ Options:
   --eval              : evaluate project.clj. Use at your own risk.")
     (let [project-clj (or (:project-clj opts)
                           "project.clj")
-          parsed (if (:eval opts)
-                   (load-file project-clj)
-                   (safe-parse project-clj))
-          {:keys [dependencies source-paths resource-paths compile-path java-source-paths]} parsed
+          project-edn (if (:eval opts)
+                        (load-file project-clj)
+                        (safe-parse project-clj))
+          project-edn (merge {:compile-path "target/classes"
+                              :source-paths ["src"]}
+                             project-edn)
+          {:keys [dependencies source-paths resource-paths compile-path java-source-paths]} project-edn
           deps-edn {:paths (cond-> (into (vec source-paths) resource-paths)
-                             compile-path
+                             java-source-paths
                              (conj compile-path))
                     :deps (into {} (map convert-dep) dependencies)}]
       (pprint/pprint
        (cond-> deps-edn
-         (and java-source-paths compile-path)
-         (add-prep-lib parsed))))))
+         java-source-paths
+         (add-prep-lib project-edn))))))
