@@ -1,3 +1,5 @@
+#!/usr/bin/env bb
+
 (ns ddiff
   (:require [babashka.deps :as deps]
             [clojure.edn :as edn]))
