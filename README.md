@@ -10,6 +10,14 @@ Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/ant
 
 For usage, run `antq --help`.
 
+## ddiff
+
+Compare two EDN files using [deep-diff2](https://github.com/lambdaisland/deep-diff2).
+
+Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/ddiff.clj`
+
+Usage: `ddiff file1.edn file2.edn`
+
 ## lein2deps
 
 Convert `project.clj` to `deps.edn`.
