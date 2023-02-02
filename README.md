@@ -18,6 +18,14 @@ Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/ddi
 
 Usage: `ddiff file1.edn file2.edn`
 
+## cljfmt
+
+Format Clojure code using [cljfmt](https://github.com/weavejester/cljfmt).
+
+Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/cljfmt.clj`
+
+For usage, run `cljfmt --help`.
+
 ## lein2deps
 
 Convert `project.clj` to `deps.edn`.
