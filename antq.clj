@@ -4,9 +4,10 @@
   (:require [babashka.cli :as cli]
             [babashka.tasks :refer [clojure]]))
 
-(def version "2.0.895")
+(def version "2.8.1206")
 
-(def deps {:deps {'com.github.liquidz/antq {:mvn/version version}}})
+(def deps {:deps {'com.github.liquidz/antq {:mvn/version version}
+                  'org.slf4j/slf4j-nop {:mvn/version "2.1.0-alpha1"}}})
 
 (def spec [[:upgrade {:desc "Upgrade outdated versions interactively."}]
            [:exclude {:coerce []
@@ -44,7 +45,7 @@ Options:")
   (println "Check out antq's README for more documentation: https://github.com/liquidz/antq"))
 
 (let [args (cli/parse-opts *command-line-args* {:spec spec})]
-  (cond (:help args) (print-help)
+  (cond (or (:help args) (empty? args)) (print-help)
         (:version args) (println version)
         :else (clojure "-Sdeps" deps "-X" (symbol "antq.tool" "outdated") args)))
 
