@@ -18,6 +18,8 @@ Install: `bbin install https://raw.githubusercontent.com/borkdude/tools/main/ddi
 
 Usage: `ddiff file1.edn file2.edn`
 
+Support flag: `-m` / `--minimize`: minimize the diff.
+
 ## cljfmt
 
 Format Clojure code using [cljfmt](https://github.com/weavejester/cljfmt).
