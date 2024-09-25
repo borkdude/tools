@@ -45,7 +45,7 @@ Options:")
   (println "Check out antq's README for more documentation: https://github.com/liquidz/antq"))
 
 (let [args (cli/parse-opts *command-line-args* {:spec spec})]
-  (cond (or (:help args) (empty? args)) (print-help)
+  (cond (:help args) (print-help)
         (:version args) (println version)
         :else (clojure "-Sdeps" deps "-X" (symbol "antq.tool" "outdated") args)))
 
